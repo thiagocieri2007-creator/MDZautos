@@ -1,4 +1,9 @@
-// CONFIGURACIÓN
+// ─── SUPABASE CONFIG ──────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://rjzutiiebzecqlnelrzw.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_F9T0ucdfNyItaawCMcQowQ_Yr11boR0';
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ─── CONFIGURACIÓN ────────────────────────────────────────────────────────────
 const CONFIG = {
     dealershipName: "MDZ",
     tagline: "Los mejores vehículos al mejor precio",
@@ -6,76 +11,6 @@ const CONFIG = {
     adminPassword: "marthi0116",
     currency: "ARS"
 };
-
-// DATOS DE MUESTRA
-const SAMPLE_VEHICLES = [
-    {
-        id: "sample-1",
-        brand: "Toyota",
-        model: "Corolla",
-        year: 2020,
-        km: 45000,
-        fuel: "Nafta",
-        transmission: "Automático",
-        traction: "Delantera",
-        vehicleType: "Sedán",
-        color: "Blanco",
-        doors: 4,
-        engine: "1.6",
-        priceARS: 8500000,
-        priceUSD: 8500,
-        condition: "Usado",
-        description: "Excelente estado, único dueño, servicio oficial, garantía incluida.",
-        images: ["data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTExIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5Ub3lvdGEgQ29yb2xsYTwvdGV4dD48L3N2Zz4="],
-        status: "disponible",
-        addedAt: "2024-01-15T10:00:00Z",
-        soldAt: null
-    },
-    {
-        id: "sample-2",
-        brand: "Ford",
-        model: "Focus",
-        year: 2019,
-        km: 32000,
-        fuel: "Nafta",
-        transmission: "Manual",
-        traction: "Delantera",
-        vehicleType: "Hatchback",
-        color: "Rojo",
-        doors: 4,
-        engine: "1.6",
-        priceARS: 7200000,
-        priceUSD: 7200,
-        condition: "Usado",
-        description: "Vehículo en perfecto estado, mantenimiento al día, ideal para ciudad.",
-        images: ["data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTExIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5Gb3JkIEZvY3VzPC90ZXh0Pjwvc3ZnPg=="],
-        status: "disponible",
-        addedAt: "2024-02-01T10:00:00Z",
-        soldAt: null
-    },
-    {
-        id: "sample-3",
-        brand: "Volkswagen",
-        model: "Golf",
-        year: 2021,
-        km: 15000,
-        fuel: "Diesel",
-        transmission: "Automático",
-        traction: "Delantera",
-        vehicleType: "Sedán",
-        color: "Azul",
-        doors: 4,
-        engine: "2.0",
-        priceARS: 12000000,
-        priceUSD: 12000,
-        condition: "Nuevo",
-        description: "Vehículo 0km, todos los opcionales, garantía de fábrica.",
-        images: ["data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMTExIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtc2l6ZT0iMjAiIGZpbGw9IiNmZmYiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5Wb2xrc3dhZ2VuIEdvbGY8L3RleHQ+PC9zdmc+"],
-        status: "disponible",
-        addedAt: "2024-03-01T10:00:00Z",
-        soldAt: null
-    }
-];
 
 // ─── COMPRESIÓN DE IMÁGENES ───────────────────────────────────────────────────
 function compressImage(file, maxWidthPx = 1200, quality = 0.75) {
@@ -96,8 +31,7 @@ function compressImage(file, maxWidthPx = 1200, quality = 0.75) {
                 canvas.height = height;
                 const ctx = canvas.getContext('2d');
                 ctx.drawImage(img, 0, 0, width, height);
-                const compressed = canvas.toDataURL('image/jpeg', quality);
-                resolve(compressed);
+                resolve(canvas.toDataURL('image/jpeg', quality));
             };
             img.src = e.target.result;
         };
@@ -106,14 +40,6 @@ function compressImage(file, maxWidthPx = 1200, quality = 0.75) {
 }
 
 // ─── UTILIDADES ───────────────────────────────────────────────────────────────
-function generateUUID() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        const r = Math.random() * 16 | 0;
-        const v = c === 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
-
 function formatUSD(amount) {
     if (!amount && amount !== 0) return '—';
     return 'USD ' + Number(amount).toLocaleString('es-AR');
@@ -138,46 +64,108 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
-function showValidationError(input, message) {
-    if (!input) return;
-    input.classList.add('invalid');
-    const error = document.createElement('div');
-    error.className = 'validation-error';
-    error.textContent = message;
-    if (input.parentNode) input.parentNode.appendChild(error);
+// ─── DATOS — SUPABASE ─────────────────────────────────────────────────────────
+async function getVehicles() {
+    const { data, error } = await supabase
+        .from('vehicles')
+        .select('*')
+        .order('added_at', { ascending: false });
+    if (error) { console.error('Error leyendo vehículos:', error); return []; }
+    return (data || []).map(dbToLocal);
 }
 
-function clearValidationErrors(form) {
-    form.querySelectorAll('.validation-error').forEach(el => el.remove());
-    form.querySelectorAll('.invalid').forEach(el => el.classList.remove('invalid'));
-}
-
-// ─── DATOS ────────────────────────────────────────────────────────────────────
-function getVehicles() {
-    try {
-        const raw = localStorage.getItem('dealership_vehicles');
-        if (!raw) return [];
-        return JSON.parse(raw);
-    } catch (e) {
-        console.error('Error leyendo localStorage:', e);
-        return [];
+async function saveVehicle(vehicle) {
+    const row = localToDB(vehicle);
+    if (vehicle.id) {
+        const { error } = await supabase.from('vehicles').update(row).eq('id', vehicle.id);
+        if (error) { console.error('Error actualizando:', error); return false; }
+    } else {
+        const { error } = await supabase.from('vehicles').insert([row]);
+        if (error) { console.error('Error insertando:', error); return false; }
     }
+    return true;
 }
 
-function saveVehicles(vehicles) {
-    try {
-        localStorage.setItem('dealership_vehicles', JSON.stringify(vehicles));
-        return true;
-    } catch (e) {
-        console.error('Error guardando en localStorage:', e);
-        return false;
-    }
+async function deleteVehicleDB(id) {
+    const { error } = await supabase.from('vehicles').delete().eq('id', id);
+    if (error) { console.error('Error eliminando:', error); return false; }
+    return true;
 }
 
-function initializeData() {
-    if (getVehicles().length === 0) {
-        saveVehicles(SAMPLE_VEHICLES);
-    }
+async function updateVehicleStatus(id, status, soldAt = null) {
+    const update = { status };
+    if (soldAt !== undefined) update.sold_at = soldAt;
+    const { error } = await supabase.from('vehicles').update(update).eq('id', id);
+    if (error) { console.error('Error actualizando status:', error); return false; }
+    return true;
+}
+
+// Convierte fila de Supabase → objeto local
+function dbToLocal(row) {
+    return {
+        id: row.id,
+        brand: row.brand,
+        model: row.model,
+        year: row.year,
+        km: row.km,
+        fuel: row.fuel,
+        transmission: row.transmission,
+        traction: row.traction,
+        vehicleType: row.vehicle_type,
+        color: row.color,
+        doors: row.doors,
+        engine: row.engine,
+        priceUSD: row.price_usd,
+        priceARS: row.price_ars,
+        costoARS: row.costo_ars,
+        condition: row.condition,
+        description: row.description,
+        images: row.images || [],
+        status: row.status || 'disponible',
+        addedAt: row.added_at,
+        soldAt: row.sold_at
+    };
+}
+
+// Convierte objeto local → fila de Supabase
+function localToDB(v) {
+    const row = {
+        brand: v.brand,
+        model: v.model,
+        year: v.year,
+        km: v.km || null,
+        fuel: v.fuel || null,
+        transmission: v.transmission || null,
+        traction: v.traction || null,
+        vehicle_type: v.vehicleType || null,
+        color: v.color || null,
+        doors: v.doors || null,
+        engine: v.engine || null,
+        price_usd: v.priceUSD,
+        price_ars: v.priceARS || null,
+        costo_ars: v.costoARS || null,
+        condition: v.condition || null,
+        description: v.description || null,
+        images: v.images || [],
+        status: v.status || 'disponible',
+        sold_at: v.soldAt || null
+    };
+    if (v.id) row.id = v.id;
+    return row;
+}
+
+// ─── SETTINGS (foto de fondo) ─────────────────────────────────────────────────
+async function getSetting(key) {
+    const { data } = await supabase.from('settings').select('value').eq('key', key).single();
+    return data ? data.value : null;
+}
+
+async function setSetting(key, value) {
+    await supabase.from('settings').upsert({ key, value });
+}
+
+async function deleteSetting(key) {
+    await supabase.from('settings').delete().eq('key', key);
 }
 
 // ─── AUTH ─────────────────────────────────────────────────────────────────────
@@ -203,22 +191,21 @@ function promptAdminPassword() {
                 <h2 style="color:var(--gold-1);text-align:center;margin-bottom:2rem;">
                     Panel de Administrador
                 </h2>
-                <form id="auth-form">
-                    <div class="form-group">
-                        <label>Contraseña:</label>
-                        <input type="password" id="auth-password" placeholder="Ingresá la contraseña" autofocus>
-                    </div>
-                    <button type="submit" class="btn" style="width:100%;margin-top:1rem;">Acceder</button>
-                    <div id="auth-error" style="color:#ff6b6b;margin-top:1rem;text-align:center;display:none;">
-                        Contraseña incorrecta
-                    </div>
-                </form>
+                <div class="form-group">
+                    <label>Contraseña:</label>
+                    <input type="password" id="auth-password" placeholder="Ingresá la contraseña" autofocus
+                        style="width:100%;padding:10px;background:var(--black-3);border:1px solid rgba(255,255,255,0.1);
+                        border-radius:6px;color:#fff;font-size:1rem;margin-top:6px;">
+                </div>
+                <button id="auth-submit" class="btn" style="width:100%;margin-top:1rem;">Acceder</button>
+                <div id="auth-error" style="color:#ff6b6b;margin-top:1rem;text-align:center;display:none;">
+                    Contraseña incorrecta
+                </div>
             </div>
         `;
         document.body.appendChild(overlay);
 
-        overlay.querySelector('#auth-form').addEventListener('submit', (e) => {
-            e.preventDefault();
+        function tryLogin() {
             const pwd = overlay.querySelector('#auth-password').value;
             if (pwd === CONFIG.adminPassword) {
                 setAdminAuth(true);
@@ -227,8 +214,22 @@ function promptAdminPassword() {
             } else {
                 overlay.querySelector('#auth-error').style.display = 'block';
             }
+        }
+
+        overlay.querySelector('#auth-submit').addEventListener('click', tryLogin);
+        overlay.querySelector('#auth-password').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') tryLogin();
         });
     });
+}
+
+// ─── LOADING ──────────────────────────────────────────────────────────────────
+function showLoading(container, message = 'Cargando...') {
+    container.innerHTML = `
+        <div style="text-align:center;padding:4rem;color:var(--text-faint);">
+            <div style="font-size:2rem;margin-bottom:1rem;animation:pulse-dot 1s infinite">⏳</div>
+            <p>${message}</p>
+        </div>`;
 }
 
 // ─── ROUTER ───────────────────────────────────────────────────────────────────
@@ -304,6 +305,7 @@ function renderHome() {
             <div class="splash-bg-overlay"></div>
             <div class="splash-custom-bg" id="splash-custom-bg"></div>
             <div class="splash-content">
+                <img src="logo.png" class="splash-logo-mobile" alt="MDZ Autos" onerror="this.style.display='none'">
                 <div class="splash-title-block">
                     <div class="splash-mdz-text">MDZ</div>
                     <div class="splash-autos-text">AUTOS</div>
@@ -343,16 +345,11 @@ function goToCatalog() {
 }
 
 // ── FOTO DE FONDO DEL SPLASH ──────────────────────────────────────────────────
-// FIX iOS: usamos un <img> tag real dentro del contenedor en lugar de
-// background-image, ya que Safari/iOS a veces ignora background-image
-// en elementos con position:absolute + ciertos contextos de stacking.
-function loadSplashPhoto() {
-    const saved = localStorage.getItem('splash_bg_photo');
+async function loadSplashPhoto() {
+    const saved = await getSetting('splash_bg_photo');
     const el = document.getElementById('splash-custom-bg');
     if (saved && el) {
-        // Limpiar contenido previo
         el.innerHTML = '';
-        // Crear <img> real — compatible con iOS/Safari
         const img = document.createElement('img');
         img.src = saved;
         img.alt = 'Foto de fondo';
@@ -369,15 +366,16 @@ function setupSplashPhotoInput() {
     input.addEventListener('change', async (e) => {
         const file = e.target.files[0];
         if (!file) return;
+        showToast('⏳ Subiendo foto...');
         const compressed = await compressImage(file, 1920, 0.82);
-        localStorage.setItem('splash_bg_photo', compressed);
+        await setSetting('splash_bg_photo', compressed);
         loadSplashPhoto();
         showToast('✅ Foto de fondo actualizada');
     });
 }
 
-function removeSplashPhoto() {
-    localStorage.removeItem('splash_bg_photo');
+async function removeSplashPhoto() {
+    await deleteSetting('splash_bg_photo');
     const el = document.getElementById('splash-custom-bg');
     if (el) { el.innerHTML = ''; el.style.opacity = '0'; }
     const removeBtn = document.getElementById('splash-photo-remove');
@@ -394,14 +392,17 @@ function maybeShowSplashEdit() {
 }
 
 // ─── CATÁLOGO ─────────────────────────────────────────────────────────────────
-function renderCatalog() {
-    const allVehicles = getVehicles();
-    const vehicles = allVehicles.filter(v => v.status !== 'oculto');
+async function renderCatalog() {
     const main = document.getElementById('main');
+    main.innerHTML = `<div class="catalog-wrap"><div id="catalog-inner"></div></div>`;
+    const inner = document.getElementById('catalog-inner');
+    showLoading(inner, 'Cargando vehículos...');
 
+    const allVehicles = await getVehicles();
+    const vehicles = allVehicles.filter(v => v.status !== 'oculto');
     const brands = [...new Set(allVehicles.map(v => v.brand).filter(Boolean))].sort();
 
-    main.innerHTML = `<div class="catalog-wrap">
+    inner.innerHTML = `
         <div class="catalog-hero">
             <h1>${CONFIG.dealershipName}</h1>
             <p>${CONFIG.tagline}</p>
@@ -456,13 +457,12 @@ function renderCatalog() {
         </div>
 
         <div class="results-counter" id="results-counter">Mostrando ${vehicles.length} de ${vehicles.length} vehículos</div>
-
         <div class="vehicle-grid" id="vehicle-grid">
             ${renderVehicleCards(vehicles)}
         </div>
-    </div>`;
+    `;
 
-    setupFilters();
+    setupFilters(allVehicles);
 }
 
 function renderVehicleCards(vehicles) {
@@ -502,7 +502,7 @@ function renderVehicleCards(vehicles) {
     }).join('');
 }
 
-function setupFilters() {
+function setupFilters(allVehicles) {
     const si = document.getElementById('search-input');
     const bf = document.getElementById('brand-filter');
     const ymi = document.getElementById('year-min');
@@ -510,7 +510,7 @@ function setupFilters() {
     const pm = document.getElementById('price-max');
 
     function applyFilters() {
-        const allVehicles = getVehicles().filter(v => v.status !== 'oculto');
+        const visible = allVehicles.filter(v => v.status !== 'oculto');
         const q = si.value.toLowerCase();
         const brand = bf.value;
         const yMin = ymi.value ? parseInt(ymi.value) : null;
@@ -519,7 +519,7 @@ function setupFilters() {
         const fuels = [...document.querySelectorAll('.fuel-filter:checked')].map(c => c.value);
         const trans = [...document.querySelectorAll('.transmission-filter:checked')].map(c => c.value);
 
-        const filtered = allVehicles.filter(v => {
+        const filtered = visible.filter(v => {
             if (q && !`${v.brand} ${v.model} ${v.description || ''}`.toLowerCase().includes(q)) return false;
             if (brand && v.brand !== brand) return false;
             if (yMin && v.year < yMin) return false;
@@ -531,7 +531,7 @@ function setupFilters() {
         });
 
         document.getElementById('results-counter').textContent =
-            `Mostrando ${filtered.length} de ${allVehicles.length} vehículos`;
+            `Mostrando ${filtered.length} de ${visible.length} vehículos`;
         document.getElementById('vehicle-grid').innerHTML = renderVehicleCards(filtered);
     }
 
@@ -541,15 +541,20 @@ function setupFilters() {
 }
 
 // ─── DETALLE ──────────────────────────────────────────────────────────────────
-function renderVehicleDetail(id) {
-    const vehicle = getVehicles().find(v => v.id === id);
+async function renderVehicleDetail(id) {
     const main = document.getElementById('main');
+    showLoading(main, 'Cargando vehículo...');
+
+    const vehicles = await getVehicles();
+    const vehicle = vehicles.find(v => v.id === id);
+
     if (!vehicle) { main.innerHTML = '<p style="padding:2rem">Vehículo no encontrado.</p>'; return; }
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
+    // Registrar vista en Supabase settings como contador simple
     const viewKey = `views_${id}`;
-    const views = parseInt(localStorage.getItem(viewKey) || '0') + 1;
-    localStorage.setItem(viewKey, views);
+    const currentViews = parseInt(await getSetting(viewKey) || '0') + 1;
+    setSetting(viewKey, String(currentViews));
 
     const thumbs = vehicle.images.length > 1
         ? `<div class="thumbnails">${vehicle.images.map((img, i) =>
@@ -624,14 +629,6 @@ function renderVehicleDetail(id) {
             t.classList.add('active');
         });
     });
-
-    document.addEventListener('keydown', function lbKey(e) {
-        const lb = document.getElementById('lightbox');
-        if (!lb || lb.style.display === 'none') { document.removeEventListener('keydown', lbKey); return; }
-        if (e.key === 'Escape') closeLightbox();
-        if (e.key === 'ArrowLeft') lightboxNav(-1);
-        if (e.key === 'ArrowRight') lightboxNav(1);
-    });
 }
 
 window.galleryNav = function(dir) {
@@ -662,21 +659,21 @@ window.lightboxNav = function(dir) {
 };
 
 // ─── COMPARAR ─────────────────────────────────────────────────────────────────
-let compareSelectionSlot = null;
-
 function startCompare(id) {
     sessionStorage.setItem('compare_a', id);
     sessionStorage.removeItem('compare_b');
     navigateTo('comparar');
 }
 
-function renderComparePage() {
-    const vehicles = getVehicles();
+async function renderComparePage() {
+    const main = document.getElementById('main');
+    showLoading(main, 'Cargando comparador...');
+
+    const vehicles = await getVehicles();
     const aId = sessionStorage.getItem('compare_a');
     const bId = sessionStorage.getItem('compare_b');
     const vA = vehicles.find(v => v.id === aId) || null;
     const vB = vehicles.find(v => v.id === bId) || null;
-    const main = document.getElementById('main');
 
     main.innerHTML = `
         <section class="compare-page">
@@ -692,6 +689,8 @@ function renderComparePage() {
             <div id="compare-selector-panel"></div>
         </section>
     `;
+
+    window._compareVehicles = vehicles;
 }
 
 function renderCompareColumn(slot, vehicle, other) {
@@ -768,8 +767,7 @@ function renderComparisonTable(vA, vB) {
 }
 
 function openCompareSelector(slot) {
-    compareSelectionSlot = slot;
-    const vehicles = getVehicles().filter(v => v.status === 'disponible');
+    const vehicles = (window._compareVehicles || []).filter(v => v.status === 'disponible');
     const otherId = sessionStorage.getItem(slot === 'compare_a' ? 'compare_b' : 'compare_a');
     const available = vehicles.filter(v => v.id !== otherId);
 
@@ -794,12 +792,10 @@ function openCompareSelector(slot) {
 
 function selectCompareVehicle(slot, id) {
     sessionStorage.setItem(slot, id);
-    compareSelectionSlot = null;
     renderComparePage();
 }
 
 function closeCompareSelector() {
-    compareSelectionSlot = null;
     const panel = document.getElementById('compare-selector-panel');
     if (panel) panel.innerHTML = '';
 }
@@ -848,7 +844,7 @@ function loadAdminSection(section) {
             setupVehicleForm(null);
             break;
         case 'list':
-            content.innerHTML = renderVehicleList();
+            renderVehicleList();
             break;
         case 'backup':
             content.innerHTML = renderBackupSection();
@@ -869,55 +865,52 @@ function renderAddVehicleForm(vehicle = null) {
         <form id="vehicle-form" autocomplete="off">
 
             <div class="form-section-title">Información básica</div>
-
             <div class="form-row">
                 <div class="form-group">
-                    <label for="brand">Marca <span class="required">*</span></label>
+                    <label>Marca <span class="required">*</span></label>
                     <input type="text" id="brand" placeholder="Ej: Toyota" value="${v.brand || ''}">
                 </div>
                 <div class="form-group">
-                    <label for="model">Modelo <span class="required">*</span></label>
+                    <label>Modelo <span class="required">*</span></label>
                     <input type="text" id="model" placeholder="Ej: Corolla" value="${v.model || ''}">
                 </div>
                 <div class="form-group">
-                    <label for="year">Año <span class="required">*</span></label>
+                    <label>Año <span class="required">*</span></label>
                     <input type="number" id="year" placeholder="Ej: 2021" value="${v.year || ''}">
                 </div>
             </div>
 
             <div class="form-section-title">Precio</div>
-
             <div class="form-row">
                 <div class="form-group">
-                    <label for="priceUSD">Precio USD <span class="required">*</span></label>
+                    <label>Precio USD <span class="required">*</span></label>
                     <input type="number" id="priceUSD" placeholder="Ej: 15000" value="${v.priceUSD || ''}">
                 </div>
                 <div class="form-group">
-                    <label for="priceARS">Precio ARS <span class="optional">(opcional)</span></label>
+                    <label>Precio ARS <span class="optional">(opcional)</span></label>
                     <input type="number" id="priceARS" placeholder="Ej: 15000000" value="${v.priceARS || ''}">
                 </div>
                 <div class="form-group">
-                    <label for="costoARS">Costo de compra USD <span class="optional">(solo vos lo ves)</span></label>
+                    <label>Costo de compra USD <span class="optional">(solo vos lo ves)</span></label>
                     <input type="number" id="costoARS" placeholder="Ej: 12000" value="${v.costoARS || ''}">
                 </div>
             </div>
 
             <div class="form-section-title">Especificaciones <span class="optional">(todas opcionales)</span></div>
-
             <div class="form-row">
                 <div class="form-group">
-                    <label for="km">Kilómetros</label>
+                    <label>Kilómetros</label>
                     <input type="number" id="km" placeholder="Ej: 45000" value="${v.km || ''}">
                 </div>
                 <div class="form-group">
-                    <label for="fuel">Combustible</label>
+                    <label>Combustible</label>
                     <select id="fuel">
                         <option value="">Seleccionar</option>
                         ${['Nafta','Diesel','Eléctrico','Híbrido','GNC'].map(f => opt(f,f,v.fuel)).join('')}
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="transmission">Transmisión</label>
+                    <label>Transmisión</label>
                     <select id="transmission">
                         <option value="">Seleccionar</option>
                         ${['Manual','Automático','CVT'].map(f => opt(f,f,v.transmission)).join('')}
@@ -926,21 +919,21 @@ function renderAddVehicleForm(vehicle = null) {
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="traction">Tracción</label>
+                    <label>Tracción</label>
                     <select id="traction">
                         <option value="">Seleccionar</option>
                         ${['Delantera','Trasera','4x4','AWD'].map(f => opt(f,f,v.traction)).join('')}
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="vehicleType">Tipo de vehículo</label>
+                    <label>Tipo de vehículo</label>
                     <select id="vehicleType">
                         <option value="">Seleccionar</option>
                         ${['Sedán','Hatchback','SUV','Pickup','Coupé','Familiar','Van','Convertible'].map(f => opt(f,f,v.vehicleType)).join('')}
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="engine">Motor / Cilindrada</label>
+                    <label>Motor / Cilindrada</label>
                     <select id="engine">
                         <option value="">Seleccionar</option>
                         ${['1.0','1.4','1.6','1.8','2.0','2.4','2.5','3.0','3.5','4.0','Otro'].map(f => opt(f,f,v.engine)).join('')}
@@ -949,18 +942,18 @@ function renderAddVehicleForm(vehicle = null) {
             </div>
             <div class="form-row">
                 <div class="form-group">
-                    <label for="color">Color</label>
+                    <label>Color</label>
                     <input type="text" id="color" placeholder="Ej: Blanco" value="${v.color || ''}">
                 </div>
                 <div class="form-group">
-                    <label for="doors">Puertas</label>
+                    <label>Puertas</label>
                     <select id="doors">
                         <option value="">Seleccionar</option>
                         ${['2','3','4','5'].map(f => opt(f,f, v.doors ? String(v.doors) : '')).join('')}
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="condition">Condición</label>
+                    <label>Condición</label>
                     <select id="condition">
                         <option value="">Seleccionar</option>
                         ${['Nuevo','Usado'].map(f => opt(f,f,v.condition)).join('')}
@@ -969,22 +962,19 @@ function renderAddVehicleForm(vehicle = null) {
             </div>
 
             <div class="form-section-title">Fotos <span class="required">*</span></div>
-
             <div class="form-group">
-                <label for="images">Fotos del vehículo (podés subir varias)</label>
+                <label>Fotos del vehículo (podés subir varias)</label>
                 <input type="file" id="images" multiple accept="image/*">
                 <p class="field-hint">La primera foto es la portada. Para seleccionar varias, usá Ctrl (o Cmd en Mac).</p>
                 <div class="image-preview" id="image-preview"></div>
             </div>
 
             <div class="form-section-title">Descripción <span class="optional">(opcional)</span></div>
-
             <div class="form-group">
                 <textarea id="description" placeholder="Detalles adicionales del vehículo...">${v.description || ''}</textarea>
             </div>
 
             <div id="form-error" class="form-error" style="display:none"></div>
-
             <button type="button" id="btn-save-vehicle" class="btn btn-large">
                 ${isEdit ? '✅ Actualizar Vehículo' : '✅ Guardar Vehículo'}
             </button>
@@ -1005,15 +995,10 @@ function setupVehicleForm(vehicleToEdit = null) {
         const preview = document.getElementById('image-preview');
         if (preview) preview.innerHTML = `<p class="field-hint">⏳ Procesando ${files.length} imagen(es), por favor espera...</p>`;
 
-        const promises = files.map(file => compressImage(file, 1200, 0.75));
-        const results = await Promise.allSettled(promises);
-
-        results.forEach((result, i) => {
-            if (result.status === 'fulfilled') {
-                currentImages.push(result.value);
-            } else {
-                console.error(`Error procesando imagen ${i + 1}:`, result.reason);
-            }
+        const results = await Promise.allSettled(files.map(f => compressImage(f, 1200, 0.75)));
+        results.forEach((r, i) => {
+            if (r.status === 'fulfilled') currentImages.push(r.value);
+            else console.error(`Error procesando imagen ${i+1}:`, r.reason);
         });
 
         imageInput.value = '';
@@ -1045,9 +1030,7 @@ function setupVehicleForm(vehicleToEdit = null) {
     const btnSave = document.getElementById('btn-save-vehicle');
     const errorDiv = document.getElementById('form-error');
 
-    btnSave.addEventListener('click', () => {
-        document.querySelectorAll('.invalid').forEach(el => el.classList.remove('invalid'));
-        document.querySelectorAll('.validation-error').forEach(el => el.remove());
+    btnSave.addEventListener('click', async () => {
         errorDiv.style.display = 'none';
 
         const brand = document.getElementById('brand').value.trim();
@@ -1069,9 +1052,11 @@ function setupVehicleForm(vehicleToEdit = null) {
             return;
         }
 
+        btnSave.disabled = true;
+        btnSave.textContent = '⏳ Guardando...';
+
         const formData = {
-            brand,
-            model,
+            brand, model,
             year: parseInt(year),
             priceUSD: parseFloat(priceUSD),
             images: currentImages
@@ -1090,62 +1075,56 @@ function setupVehicleForm(vehicleToEdit = null) {
             }
         });
 
-        const vehicles = getVehicles();
-
         if (vehicleToEdit) {
-            const idx = vehicles.findIndex(v => v.id === vehicleToEdit.id);
-            if (idx !== -1) {
-                vehicles[idx] = { ...vehicleToEdit, ...formData };
-            }
-            saveVehicles(vehicles);
-            showToast('✅ Vehículo actualizado correctamente');
-            renderAdmin('list');
+            formData.id = vehicleToEdit.id;
+            formData.status = vehicleToEdit.status;
+            formData.addedAt = vehicleToEdit.addedAt;
+            formData.soldAt = vehicleToEdit.soldAt;
         } else {
-            const newVehicle = {
-                ...formData,
-                id: generateUUID(),
-                status: 'disponible',
-                addedAt: new Date().toISOString(),
-                soldAt: null
-            };
-            vehicles.push(newVehicle);
-            const saved = saveVehicles(vehicles);
+            formData.status = 'disponible';
+            formData.soldAt = null;
+        }
 
-            if (saved) {
-                showToast('✅ Vehículo guardado correctamente');
+        const ok = await saveVehicle(formData);
+        btnSave.disabled = false;
+        btnSave.textContent = vehicleToEdit ? '✅ Actualizar Vehículo' : '✅ Guardar Vehículo';
+
+        if (ok) {
+            showToast(vehicleToEdit ? '✅ Vehículo actualizado' : '✅ Vehículo guardado');
+            if (vehicleToEdit) {
+                renderAdmin('list');
+            } else {
                 document.getElementById('vehicle-form').reset();
                 currentImages = [];
                 updateImagePreview();
                 errorDiv.style.display = 'none';
-            } else {
-                errorDiv.innerHTML = '❌ Error al guardar. El almacenamiento podría estar lleno.';
-                errorDiv.style.display = 'block';
             }
+        } else {
+            errorDiv.innerHTML = '❌ Error al guardar. Revisá tu conexión.';
+            errorDiv.style.display = 'block';
         }
     });
 }
 
 // ─── LISTA DE VEHÍCULOS ───────────────────────────────────────────────────────
-function renderVehicleList() {
-    const vehicles = getVehicles();
+async function renderVehicleList() {
+    const content = document.getElementById('admin-content');
+    showLoading(content, 'Cargando lista...');
+    const vehicles = await getVehicles();
 
     const statusLabel = { disponible: '🟢 Disponible', vendido: '🔴 Vendido', oculto: '⚫ Oculto' };
     const eyeIcon = v => v.status === 'oculto'
-        ? `<button class="action-btn" title="Mostrar en catálogo" onclick="toggleHidden('${v.id}')">👁️</button>`
-        : `<button class="action-btn" title="Ocultar del catálogo" onclick="toggleHidden('${v.id}')">🙈</button>`;
+        ? `<button class="action-btn" title="Mostrar" onclick="toggleHidden('${v.id}')">👁️</button>`
+        : `<button class="action-btn" title="Ocultar" onclick="toggleHidden('${v.id}')">🙈</button>`;
 
-    return `
+    content.innerHTML = `
         <h2>Lista de Vehículos (${vehicles.length})</h2>
         <div style="overflow-x:auto">
         <table class="vehicle-table">
             <thead>
                 <tr>
-                    <th>Foto</th>
-                    <th>Vehículo</th>
-                    <th>Año</th>
-                    <th>Precio USD</th>
-                    <th>Estado</th>
-                    <th>Acciones</th>
+                    <th>Foto</th><th>Vehículo</th><th>Año</th>
+                    <th>Precio USD</th><th>Estado</th><th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -1158,7 +1137,7 @@ function renderVehicleList() {
                         <td>${statusLabel[v.status] || v.status}</td>
                         <td class="actions-column">
                             <button class="action-btn" title="Editar" onclick="editVehicle('${v.id}')">✏️</button>
-                            <button class="action-btn" title="${v.status === 'disponible' ? 'Marcar como vendido' : 'Marcar como disponible'}"
+                            <button class="action-btn" title="${v.status === 'disponible' ? 'Marcar vendido' : 'Marcar disponible'}"
                                 onclick="toggleSold('${v.id}')">${v.status === 'disponible' ? '💰' : '↩️'}</button>
                             ${eyeIcon(v)}
                             <button class="action-btn" title="Eliminar" onclick="deleteVehicle('${v.id}')">🗑️</button>
@@ -1169,8 +1148,9 @@ function renderVehicleList() {
         </div>`;
 }
 
-function editVehicle(id) {
-    const vehicle = getVehicles().find(v => v.id === id);
+async function editVehicle(id) {
+    const vehicles = await getVehicles();
+    const vehicle = vehicles.find(v => v.id === id);
     if (!vehicle) return;
     const content = document.getElementById('admin-content');
     content.innerHTML = renderAddVehicleForm(vehicle);
@@ -1178,44 +1158,43 @@ function editVehicle(id) {
     content.scrollIntoView({ behavior: 'smooth' });
 }
 
-function toggleSold(id) {
-    const vehicles = getVehicles();
+async function toggleSold(id) {
+    const vehicles = await getVehicles();
     const v = vehicles.find(x => x.id === id);
     if (!v) return;
     if (v.status === 'disponible') {
-        v.status = 'vendido';
-        v.soldAt = new Date().toISOString();
+        await updateVehicleStatus(id, 'vendido', new Date().toISOString());
         showToast('Vehículo marcado como vendido');
     } else {
-        v.status = 'disponible';
-        v.soldAt = null;
+        await updateVehicleStatus(id, 'disponible', null);
         showToast('Vehículo marcado como disponible');
     }
-    saveVehicles(vehicles);
-    loadAdminSection('list');
+    renderVehicleList();
 }
 
-function toggleHidden(id) {
-    const vehicles = getVehicles();
+async function toggleHidden(id) {
+    const vehicles = await getVehicles();
     const v = vehicles.find(x => x.id === id);
     if (!v) return;
     if (v.status === 'oculto') {
-        v.status = 'disponible';
+        await updateVehicleStatus(id, 'disponible');
         showToast('👁️ Vehículo visible en el catálogo');
     } else {
-        v.status = 'oculto';
+        await updateVehicleStatus(id, 'oculto');
         showToast('🙈 Vehículo ocultado del catálogo');
     }
-    saveVehicles(vehicles);
-    loadAdminSection('list');
+    renderVehicleList();
 }
 
-function deleteVehicle(id) {
+async function deleteVehicle(id) {
     if (!confirm('¿Eliminar este vehículo? Esta acción no se puede deshacer.')) return;
-    const vehicles = getVehicles().filter(v => v.id !== id);
-    saveVehicles(vehicles);
-    showToast('🗑️ Vehículo eliminado');
-    loadAdminSection('list');
+    const ok = await deleteVehicleDB(id);
+    if (ok) {
+        showToast('🗑️ Vehículo eliminado');
+        renderVehicleList();
+    } else {
+        showToast('❌ Error al eliminar', 'error');
+    }
 }
 
 // ─── BACKUP ───────────────────────────────────────────────────────────────────
@@ -1225,22 +1204,22 @@ function renderBackupSection() {
         <div class="backup-section">
             <div class="backup-block">
                 <h3>📤 Exportar datos</h3>
-                <p>Descargá un archivo JSON con todos tus vehículos e imágenes.
-                   Usalo para hacer un backup o pasar la app a otra computadora.</p>
+                <p>Descargá un archivo JSON con todos tus vehículos e imágenes como backup.</p>
                 <button class="btn" onclick="exportData()">Exportar datos (JSON)</button>
             </div>
             <div class="backup-block">
                 <h3>📥 Importar datos</h3>
                 <p>Seleccioná un archivo JSON exportado anteriormente.
-                   <strong>Esto reemplazará todos los datos actuales.</strong></p>
+                   <strong>Esto agrega los vehículos del archivo a los existentes.</strong></p>
                 <input type="file" id="import-file" accept=".json" style="margin-bottom:1rem">
                 <button class="btn" onclick="importData()">Importar datos (JSON)</button>
             </div>
         </div>`;
 }
 
-function exportData() {
-    const data = { vehicles: getVehicles(), exportedAt: new Date().toISOString() };
+async function exportData() {
+    const vehicles = await getVehicles();
+    const data = { vehicles, exportedAt: new Date().toISOString() };
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -1253,16 +1232,20 @@ function exportData() {
     showToast('✅ Datos exportados correctamente');
 }
 
-function importData() {
+async function importData() {
     const file = document.getElementById('import-file').files[0];
     if (!file) { alert('Seleccioná un archivo primero'); return; }
     const reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = async e => {
         try {
             const data = JSON.parse(e.target.result);
             if (data.vehicles && Array.isArray(data.vehicles)) {
-                saveVehicles(data.vehicles);
-                showToast('✅ Datos importados. Recargá la página para ver los cambios.');
+                showToast('⏳ Importando vehículos...');
+                for (const v of data.vehicles) {
+                    delete v.id;
+                    await saveVehicle(v);
+                }
+                showToast(`✅ ${data.vehicles.length} vehículos importados correctamente`);
             } else {
                 alert('Archivo inválido: no contiene vehículos.');
             }
@@ -1272,7 +1255,7 @@ function importData() {
 }
 
 // ─── ESTADÍSTICAS ─────────────────────────────────────────────────────────────
-function renderStats() {
+async function renderStats() {
     const main = document.getElementById('main');
     main.innerHTML = `
         <div class="stats-page">
@@ -1285,7 +1268,6 @@ function renderStats() {
                     <a href="#admin" class="btn btn-outline" style="align-self:center">← Volver al Admin</a>
                 </div>
                 <div class="gold-divider"></div>
-
                 <div class="stats-controls">
                     <div class="stats-period-bar">
                         <span class="period-label">Período:</span>
@@ -1299,48 +1281,46 @@ function renderStats() {
                     </div>
                 </div>
             </div>
-
             <div class="stats-tabs">
-                <button class="stats-tab active" data-tab="resumen">
-                    <span class="tab-icon">📊</span>
-                    <span>Resumen</span>
-                </button>
-                <button class="stats-tab" data-tab="rentabilidad">
-                    <span class="tab-icon">💰</span>
-                    <span>Rentabilidad</span>
-                </button>
-                <button class="stats-tab" data-tab="stock">
-                    <span class="tab-icon">🚗</span>
-                    <span>Stock</span>
-                </button>
-                <button class="stats-tab" data-tab="interes">
-                    <span class="tab-icon">👁️</span>
-                    <span>Interés</span>
-                </button>
+                <button class="stats-tab active" data-tab="resumen"><span class="tab-icon">📊</span><span>Resumen</span></button>
+                <button class="stats-tab" data-tab="rentabilidad"><span class="tab-icon">💰</span><span>Rentabilidad</span></button>
+                <button class="stats-tab" data-tab="stock"><span class="tab-icon">🚗</span><span>Stock</span></button>
+                <button class="stats-tab" data-tab="interes"><span class="tab-icon">👁️</span><span>Interés</span></button>
             </div>
-
-            <div id="stats-content" class="stats-content-area"></div>
+            <div id="stats-content" class="stats-content-area">
+                <div style="text-align:center;padding:3rem;color:var(--text-faint);">⏳ Cargando estadísticas...</div>
+            </div>
         </div>`;
 
+    const allVehicles = await getVehicles();
     let currentMonths = 1;
     let currentTab = 'resumen';
 
     function renderTab() {
-        const vehicles = getVehicles();
         const now = new Date();
-        const filtered = currentMonths === 0 ? vehicles : vehicles.filter(v => {
+        const filtered = currentMonths === 0 ? allVehicles : allVehicles.filter(v => {
             const d = new Date(v.addedAt);
-            const diff = (now - d) / (1000 * 60 * 60 * 24 * 30);
-            return diff <= currentMonths;
+            return (now - d) / (1000 * 60 * 60 * 24 * 30) <= currentMonths;
         });
         const content = document.getElementById('stats-content');
         if (!content) return;
 
         switch (currentTab) {
-            case 'resumen':     content.innerHTML = renderStatsResumen(vehicles, filtered, currentMonths); renderResumenCharts(filtered); break;
-            case 'rentabilidad':content.innerHTML = renderStatsRentabilidad(vehicles, filtered); break;
-            case 'stock':       content.innerHTML = renderStatsStock(vehicles); break;
-            case 'interes':     content.innerHTML = renderStatsInteres(vehicles); renderInteresCharts(vehicles); break;
+            case 'resumen':
+                content.innerHTML = renderStatsResumen(allVehicles, filtered, currentMonths);
+                renderResumenCharts(filtered);
+                break;
+            case 'rentabilidad':
+                content.innerHTML = renderStatsRentabilidad(allVehicles, filtered);
+                break;
+            case 'stock':
+                content.innerHTML = renderStatsStock(allVehicles);
+                setTimeout(() => renderStockCharts(allVehicles), 50);
+                break;
+            case 'interes':
+                content.innerHTML = renderStatsInteres(allVehicles);
+                renderInteresCharts(allVehicles);
+                break;
         }
     }
 
@@ -1381,78 +1361,36 @@ function renderStatsResumen(allVehicles, filtered, months) {
         .sort((a, b) => new Date(b.soldAt) - new Date(a.soldAt)).slice(0, 10);
 
     return `
-        <div class="stats-section-intro">
-            <p>Visión general del negocio en el período seleccionado.</p>
-        </div>
-
+        <div class="stats-section-intro"><p>Visión general del negocio en el período seleccionado.</p></div>
         <div class="stats-kpi-grid">
-            <div class="kpi-card kpi-gold">
-                <div class="kpi-icon-wrap">🚗</div>
-                <div class="kpi-value">${available.length}</div>
-                <div class="kpi-label">Vehículos en stock</div>
-                <div class="kpi-sub">disponibles ahora</div>
-            </div>
-            <div class="kpi-card kpi-green">
-                <div class="kpi-icon-wrap">✅</div>
-                <div class="kpi-value">${soldFiltered.length}</div>
-                <div class="kpi-label">Vendidos</div>
-                <div class="kpi-sub">en el período</div>
-            </div>
-            <div class="kpi-card">
-                <div class="kpi-icon-wrap">⏱️</div>
-                <div class="kpi-value">${avgDays !== null ? avgDays + ' d' : '—'}</div>
-                <div class="kpi-label">Tiempo promedio de venta</div>
-                <div class="kpi-sub">desde publicación hasta venta</div>
-            </div>
-            <div class="kpi-card kpi-blue">
-                <div class="kpi-icon-wrap">💵</div>
-                <div class="kpi-value kpi-value-sm">${formatUSD(totalValueUSD)}</div>
-                <div class="kpi-label">Valor del inventario</div>
-                <div class="kpi-sub">suma de precios en stock</div>
-            </div>
+            <div class="kpi-card kpi-gold"><div class="kpi-icon-wrap">🚗</div><div class="kpi-value">${available.length}</div><div class="kpi-label">Vehículos en stock</div><div class="kpi-sub">disponibles ahora</div></div>
+            <div class="kpi-card kpi-green"><div class="kpi-icon-wrap">✅</div><div class="kpi-value">${soldFiltered.length}</div><div class="kpi-label">Vendidos</div><div class="kpi-sub">en el período</div></div>
+            <div class="kpi-card"><div class="kpi-icon-wrap">⏱️</div><div class="kpi-value">${avgDays !== null ? avgDays + ' d' : '—'}</div><div class="kpi-label">Tiempo promedio de venta</div></div>
+            <div class="kpi-card kpi-blue"><div class="kpi-icon-wrap">💵</div><div class="kpi-value kpi-value-sm">${formatUSD(totalValueUSD)}</div><div class="kpi-label">Valor del inventario</div></div>
         </div>
-
         <div class="charts-row">
             <div class="chart-box">
-                <div class="chart-box-header">
-                    <h3>Actividad mensual</h3>
-                    <span class="chart-legend-hint">Últimos 12 meses</span>
-                </div>
+                <div class="chart-box-header"><h3>Actividad mensual</h3><span class="chart-legend-hint">Últimos 12 meses</span></div>
                 <canvas id="chart-activity" height="140"></canvas>
             </div>
-            <div class="chart-box chart-box-sm">
-                <div class="chart-box-header">
-                    <h3>Estado del stock</h3>
-                    <span class="chart-legend-hint">Total histórico</span>
-                </div>
+            <div class="chart-box">
+                <div class="chart-box-header"><h3>Estado del stock</h3></div>
                 <canvas id="chart-status" height="140"></canvas>
             </div>
         </div>
-
         <div class="stats-table-section">
-            <div class="stats-table-header">
-                <h3>Últimas ventas</h3>
-                <span class="badge-count">${lastSales.length} registros</span>
-            </div>
+            <div class="stats-table-header"><h3>Últimas ventas</h3><span class="badge-count">${lastSales.length} registros</span></div>
             <div style="overflow-x:auto">
-            <table class="vehicle-table stats-table">
-                <thead>
-                    <tr>
-                        <th>Vehículo</th>
-                        <th>Fecha de venta</th>
-                        <th>Precio USD</th>
-                        <th>Días en stock</th>
-                    </tr>
-                </thead>
+            <table class="vehicle-table">
+                <thead><tr><th>Vehículo</th><th>Fecha de venta</th><th>Precio USD</th><th>Días en stock</th></tr></thead>
                 <tbody>
                     ${lastSales.map(v => {
                         const dias = Math.round((new Date(v.soldAt) - new Date(v.addedAt)) / 86400000);
-                        const fast = dias <= 15;
                         return `<tr>
                             <td><strong>${v.brand} ${v.model}</strong> <span style="color:var(--text-muted)">${v.year}</span></td>
                             <td>${new Date(v.soldAt).toLocaleDateString('es-AR')}</td>
                             <td><strong style="color:var(--gold-1)">${formatUSD(v.priceUSD)}</strong></td>
-                            <td>${fast ? `<span class="badge-green">⚡ ${dias} días</span>` : `${dias} días`}</td>
+                            <td>${dias <= 15 ? `<span class="badge-green">⚡ ${dias} días</span>` : `${dias} días`}</td>
                         </tr>`;
                     }).join('') || '<tr><td colspan="4" class="table-empty">Sin ventas registradas aún</td></tr>'}
                 </tbody>
@@ -1464,7 +1402,6 @@ function renderStatsResumen(allVehicles, filtered, months) {
 function renderResumenCharts(vehicles) {
     setTimeout(() => {
         const monthsData = getLast12MonthsData(vehicles);
-
         const actCtx = document.getElementById('chart-activity');
         if (actCtx) {
             new Chart(actCtx, {
@@ -1472,26 +1409,13 @@ function renderResumenCharts(vehicles) {
                 data: {
                     labels: monthsData.labels,
                     datasets: [
-                        {
-                            label: 'Ingresados',
-                            data: monthsData.added,
-                            backgroundColor: 'rgba(201,168,76,0.7)',
-                            borderColor: '#c9a84c',
-                            borderWidth: 1
-                        },
-                        {
-                            label: 'Vendidos',
-                            data: monthsData.sold,
-                            backgroundColor: 'rgba(255,255,255,0.15)',
-                            borderColor: 'rgba(255,255,255,0.6)',
-                            borderWidth: 1
-                        }
+                        { label: 'Ingresados', data: monthsData.added, backgroundColor: 'rgba(201,168,76,0.7)', borderColor: '#c9a84c', borderWidth: 1 },
+                        { label: 'Vendidos', data: monthsData.sold, backgroundColor: 'rgba(255,255,255,0.15)', borderColor: 'rgba(255,255,255,0.6)', borderWidth: 1 }
                     ]
                 },
                 options: chartOptions()
             });
         }
-
         const available = vehicles.filter(v => v.status === 'disponible').length;
         const sold = vehicles.filter(v => v.status === 'vendido').length;
         const hidden = vehicles.filter(v => v.status === 'oculto').length;
@@ -1501,12 +1425,7 @@ function renderResumenCharts(vehicles) {
                 type: 'doughnut',
                 data: {
                     labels: ['Disponibles', 'Vendidos', 'Ocultos'],
-                    datasets: [{
-                        data: [available, sold, hidden],
-                        backgroundColor: ['rgba(201,168,76,0.8)', 'rgba(100,200,100,0.7)', 'rgba(80,80,80,0.7)'],
-                        borderColor: ['#c9a84c', '#64c864', '#505050'],
-                        borderWidth: 2
-                    }]
+                    datasets: [{ data: [available, sold, hidden], backgroundColor: ['rgba(201,168,76,0.8)', 'rgba(100,200,100,0.7)', 'rgba(80,80,80,0.7)'], borderColor: ['#c9a84c', '#64c864', '#505050'], borderWidth: 2 }]
                 },
                 options: { ...chartOptions(), cutout: '65%' }
             });
@@ -1517,10 +1436,8 @@ function renderResumenCharts(vehicles) {
 function renderStatsRentabilidad(allVehicles, filtered) {
     const sold = allVehicles.filter(v => v.status === 'vendido');
     const available = allVehicles.filter(v => v.status === 'disponible');
-
     const withCost = sold.filter(v => v.costoARS);
     const totalRevenue = sold.reduce((s, v) => s + (v.priceUSD || 0), 0);
-    const totalCost = withCost.reduce((s, v) => s + (v.costoARS || 0), 0);
     const totalProfit = withCost.reduce((s, v) => s + ((v.priceUSD || 0) - (v.costoARS || 0)), 0);
     const avgMargin = withCost.length
         ? Math.round(withCost.reduce((s, v) => s + (((v.priceUSD - v.costoARS) / v.costoARS) * 100), 0) / withCost.length)
@@ -1536,25 +1453,12 @@ function renderStatsRentabilidad(allVehicles, filtered) {
             <div class="kpi-card"><div class="kpi-icon-wrap">%</div><div class="kpi-value">${avgMargin !== null ? avgMargin + '%' : '—'}</div><div class="kpi-label">Margen promedio</div></div>
             <div class="kpi-card"><div class="kpi-icon-wrap">🎫</div><div class="kpi-value">${formatUSD(ticketAvg)}</div><div class="kpi-label">Ticket promedio</div></div>
         </div>
-        ${withCost.length === 0 ? `
-            <div class="stats-info-box">
-                💡 Para ver la rentabilidad, cargá el <strong>Costo de compra USD</strong>
-                al registrar o editar cada vehículo. Ese campo nunca se muestra al cliente.
-            </div>` : ''}
+        ${withCost.length === 0 ? `<div class="stats-info-box">💡 Para ver la rentabilidad, cargá el <strong>Costo de compra USD</strong> al registrar cada vehículo.</div>` : ''}
         <div class="chart-box" style="margin-top:2rem">
             <h3>Detalle por vehículo vendido</h3>
             <div style="overflow-x:auto">
             <table class="vehicle-table">
-                <thead>
-                    <tr>
-                        <th>Vehículo</th>
-                        <th>Precio venta</th>
-                        <th>Costo</th>
-                        <th>Ganancia</th>
-                        <th>Margen</th>
-                        <th>Días en stock</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Vehículo</th><th>Precio venta</th><th>Costo</th><th>Ganancia</th><th>Margen</th><th>Días en stock</th></tr></thead>
                 <tbody>
                     ${sold.sort((a,b) => new Date(b.soldAt||0) - new Date(a.soldAt||0)).map(v => {
                         const ganancia = v.costoARS ? (v.priceUSD - v.costoARS) : null;
@@ -1578,24 +1482,13 @@ function renderStatsRentabilidad(allVehicles, filtered) {
 function renderStatsStock(allVehicles) {
     const available = allVehicles.filter(v => v.status === 'disponible');
     const now = new Date();
-
-    function daysInStock(v) {
-        return Math.floor((now - new Date(v.addedAt)) / 86400000);
-    }
-
+    function daysInStock(v) { return Math.floor((now - new Date(v.addedAt)) / 86400000); }
     function alertBadge(days) {
         if (days >= 60) return '<span class="badge-red">⚠️ Revisar precio</span>';
         if (days >= 30) return '<span class="badge-yellow">⏳ Atención</span>';
         return '<span class="badge-green">✓ Reciente</span>';
     }
-
     const sorted = [...available].sort((a, b) => daysInStock(b) - daysInStock(a));
-
-    const byType = {};
-    available.forEach(v => {
-        const t = v.vehicleType || 'Sin tipo';
-        byType[t] = (byType[t] || 0) + 1;
-    });
 
     return `
         <div class="stats-kpi-grid">
@@ -1609,116 +1502,85 @@ function renderStatsStock(allVehicles) {
             <table class="vehicle-table">
                 <thead><tr><th>Foto</th><th>Vehículo</th><th>Precio USD</th><th>Días en stock</th><th>Estado</th></tr></thead>
                 <tbody>
-                    ${sorted.map(v => {
-                        const days = daysInStock(v);
-                        return `<tr>
-                            <td><img src="${v.images[0]}" style="width:50px;height:38px;object-fit:cover;border-radius:4px"></td>
-                            <td>${v.brand} ${v.model} ${v.year}</td>
-                            <td>${formatUSD(v.priceUSD)}</td>
-                            <td>${days}</td>
-                            <td>${alertBadge(days)}</td>
-                        </tr>`;
-                    }).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">Sin vehículos en stock</td></tr>'}
+                    ${sorted.map(v => `<tr>
+                        <td><img src="${v.images[0]}" style="width:50px;height:38px;object-fit:cover;border-radius:4px"></td>
+                        <td>${v.brand} ${v.model} ${v.year}</td>
+                        <td>${formatUSD(v.priceUSD)}</td>
+                        <td>${daysInStock(v)}</td>
+                        <td>${alertBadge(daysInStock(v))}</td>
+                    </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">Sin vehículos en stock</td></tr>'}
                 </tbody>
             </table>
             </div>
         </div>
         <div class="charts-row" style="margin-top:2rem">
-            <div class="chart-box">
-                <h3>Por tipo de vehículo</h3>
-                <canvas id="chart-type" height="160"></canvas>
-            </div>
-            <div class="chart-box">
-                <h3>Por combustible</h3>
-                <canvas id="chart-fuel" height="160"></canvas>
-            </div>
-        </div>
-        <script>
-        setTimeout(()=>{
-            const byType = ${JSON.stringify(byType)};
-            const allV = ${JSON.stringify(available)};
-            const byFuel = {};
-            allV.forEach(v=>{const f=v.fuel||'N/D';byFuel[f]=(byFuel[f]||0)+1;});
-            const gold = 'rgba(201,168,76,0.8)';
-            const goldB = '#c9a84c';
-            const colors = ['rgba(201,168,76,0.8)','rgba(240,208,96,0.7)','rgba(138,106,26,0.8)','rgba(255,255,255,0.2)','rgba(100,180,100,0.6)','rgba(180,100,100,0.6)'];
-            const tCtx = document.getElementById('chart-type');
-            if(tCtx) new Chart(tCtx,{type:'bar',data:{labels:Object.keys(byType),datasets:[{data:Object.values(byType),backgroundColor:gold,borderColor:goldB,borderWidth:1}]},options:chartOptions()});
-            const fCtx = document.getElementById('chart-fuel');
-            if(fCtx) new Chart(fCtx,{type:'doughnut',data:{labels:Object.keys(byFuel),datasets:[{data:Object.values(byFuel),backgroundColor:colors,borderColor:'#1a1a1a',borderWidth:2}]},options:{...chartOptions(),cutout:'55%'}});
-        },50);
-        <\/script>`;
+            <div class="chart-box"><h3>Por tipo de vehículo</h3><canvas id="chart-type" height="160"></canvas></div>
+            <div class="chart-box"><h3>Por combustible</h3><canvas id="chart-fuel" height="160"></canvas></div>
+        </div>`;
 }
 
-function renderStatsInteres(allVehicles) {
-    const now = new Date();
-
-    const withViews = allVehicles.map(v => ({
-        ...v,
-        views: parseInt(localStorage.getItem(`views_${v.id}`) || '0')
-    })).sort((a, b) => b.views - a.views);
-
-    const noViews7days = allVehicles.filter(v => {
-        const views = parseInt(localStorage.getItem(`views_${v.id}`) || '0');
-        const days = (now - new Date(v.addedAt)) / 86400000;
-        return views === 0 && days > 7 && v.status === 'disponible';
+function renderStockCharts(allVehicles) {
+    const available = allVehicles.filter(v => v.status === 'disponible');
+    const byType = {};
+    const byFuel = {};
+    available.forEach(v => {
+        const t = v.vehicleType || 'Sin tipo';
+        byType[t] = (byType[t] || 0) + 1;
+        const f = v.fuel || 'N/D';
+        byFuel[f] = (byFuel[f] || 0) + 1;
     });
+    const colors = ['rgba(201,168,76,0.8)','rgba(240,208,96,0.7)','rgba(138,106,26,0.8)','rgba(255,255,255,0.2)','rgba(100,180,100,0.6)','rgba(180,100,100,0.6)'];
+    const tCtx = document.getElementById('chart-type');
+    if (tCtx) new Chart(tCtx, { type: 'bar', data: { labels: Object.keys(byType), datasets: [{ data: Object.values(byType), backgroundColor: 'rgba(201,168,76,0.8)', borderColor: '#c9a84c', borderWidth: 1 }] }, options: chartOptions() });
+    const fCtx = document.getElementById('chart-fuel');
+    if (fCtx) new Chart(fCtx, { type: 'doughnut', data: { labels: Object.keys(byFuel), datasets: [{ data: Object.values(byFuel), backgroundColor: colors, borderColor: '#1a1a1a', borderWidth: 2 }] }, options: { ...chartOptions(), cutout: '55%' } });
+}
 
-    return `
+async function renderStatsInteres(allVehicles) {
+    const viewPromises = allVehicles.map(async v => ({
+        ...v,
+        views: parseInt(await getSetting(`views_${v.id}`) || '0')
+    }));
+    const withViews = (await Promise.all(viewPromises)).sort((a, b) => b.views - a.views);
+
+    const content = document.getElementById('stats-content');
+    if (!content) return;
+
+    content.innerHTML = `
         <div class="chart-box">
             <h3>🔥 Top 10 vehículos más vistos</h3>
             <table class="vehicle-table">
                 <thead><tr><th>Foto</th><th>Vehículo</th><th>Vistas</th><th>Precio USD</th><th>Estado</th></tr></thead>
                 <tbody>
-                    ${withViews.slice(0, 10).map(v => `
-                        <tr>
-                            <td><img src="${v.images[0]}" style="width:50px;height:38px;object-fit:cover;border-radius:4px"></td>
-                            <td>${v.brand} ${v.model} ${v.year}</td>
-                            <td><strong style="color:var(--gold-1)">${v.views}</strong></td>
-                            <td>${formatUSD(v.priceUSD)}</td>
-                            <td>${v.status}</td>
-                        </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">Sin vistas registradas aún</td></tr>'}
+                    ${withViews.slice(0, 10).map(v => `<tr>
+                        <td><img src="${v.images[0]}" style="width:50px;height:38px;object-fit:cover;border-radius:4px"></td>
+                        <td>${v.brand} ${v.model} ${v.year}</td>
+                        <td><strong style="color:var(--gold-1)">${v.views}</strong></td>
+                        <td>${formatUSD(v.priceUSD)}</td>
+                        <td>${v.status}</td>
+                    </tr>`).join('') || '<tr><td colspan="5" style="text-align:center;color:var(--text-muted)">Sin vistas registradas aún</td></tr>'}
                 </tbody>
             </table>
         </div>
-        ${noViews7days.length > 0 ? `
-        <div class="stats-info-box stats-warning" style="margin-top:1.5rem">
-            ⚠️ <strong>${noViews7days.length} vehículo(s) sin ninguna vista en más de 7 días:</strong>
-            <ul style="margin-top:0.5rem">
-                ${noViews7days.map(v => `<li>${v.brand} ${v.model} ${v.year}</li>`).join('')}
-            </ul>
-            Revisá las fotos o el precio de estos vehículos.
-        </div>` : ''}
         <div class="charts-row" style="margin-top:2rem">
-            <div class="chart-box">
-                <h3>Interés por tipo de vehículo</h3>
-                <canvas id="chart-interest" height="160"></canvas>
-            </div>
+            <div class="chart-box"><h3>Interés por tipo de vehículo</h3><canvas id="chart-interest" height="160"></canvas></div>
         </div>`;
+
+    renderInteresCharts(withViews);
 }
 
-function renderInteresCharts(allVehicles) {
+function renderInteresCharts(vehicles) {
     setTimeout(() => {
         const byType = {};
-        allVehicles.forEach(v => {
+        vehicles.forEach(v => {
             const t = v.vehicleType || 'Sin tipo';
-            const views = parseInt(localStorage.getItem(`views_${v.id}`) || '0');
-            byType[t] = (byType[t] || 0) + views;
+            byType[t] = (byType[t] || 0) + (v.views || 0);
         });
         const ctx = document.getElementById('chart-interest');
         if (ctx) {
             new Chart(ctx, {
                 type: 'bar',
-                data: {
-                    labels: Object.keys(byType),
-                    datasets: [{
-                        label: 'Vistas',
-                        data: Object.values(byType),
-                        backgroundColor: 'rgba(201,168,76,0.7)',
-                        borderColor: '#c9a84c',
-                        borderWidth: 1
-                    }]
-                },
+                data: { labels: Object.keys(byType), datasets: [{ label: 'Vistas', data: Object.values(byType), backgroundColor: 'rgba(201,168,76,0.7)', borderColor: '#c9a84c', borderWidth: 1 }] },
                 options: { ...chartOptions(), indexAxis: 'y' }
             });
         }
@@ -1727,10 +1589,7 @@ function renderInteresCharts(allVehicles) {
 
 function getLast12MonthsData(vehicles) {
     const now = new Date();
-    const labels = [];
-    const added = [];
-    const sold = [];
-
+    const labels = [], added = [], sold = [];
     for (let i = 11; i >= 0; i--) {
         const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
         const key = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`;
@@ -1744,9 +1603,7 @@ function getLast12MonthsData(vehicles) {
 function chartOptions() {
     return {
         responsive: true,
-        plugins: {
-            legend: { labels: { color: '#ffffff', font: { size: 12 } } }
-        },
+        plugins: { legend: { labels: { color: '#ffffff', font: { size: 12 } } } },
         scales: {
             x: { ticks: { color: '#aaaaaa' }, grid: { color: 'rgba(255,255,255,0.05)' } },
             y: { ticks: { color: '#aaaaaa' }, grid: { color: 'rgba(255,255,255,0.05)' }, beginAtZero: true }
@@ -1755,8 +1612,9 @@ function chartOptions() {
 }
 
 // ─── PDF ──────────────────────────────────────────────────────────────────────
-function generatePDF(vehicleId) {
-    const vehicle = getVehicles().find(v => v.id === vehicleId);
+async function generatePDF(vehicleId) {
+    const vehicles = await getVehicles();
+    const vehicle = vehicles.find(v => v.id === vehicleId);
     if (!vehicle) return;
 
     const { jsPDF } = window.jspdf;
@@ -1770,7 +1628,6 @@ function generatePDF(vehicleId) {
     doc.setFontSize(10);
     doc.setTextColor(180, 180, 180);
     doc.text(CONFIG.tagline, 105, 28, { align: 'center' });
-
     doc.setFontSize(16);
     doc.setTextColor(50, 50, 50);
     doc.text(`${vehicle.brand} ${vehicle.model} ${vehicle.year}`, 20, 55);
@@ -1788,32 +1645,21 @@ function generatePDF(vehicleId) {
         vehicle.priceARS ? ['Precio ARS', formatARS(vehicle.priceARS)] : null,
     ].filter(Boolean);
 
-    doc.autoTable({
-        startY: 62,
-        head: [['Especificación', 'Valor']],
-        body: rows,
-        theme: 'grid',
-        headStyles: { fillColor: [201, 168, 76], textColor: [0, 0, 0], fontStyle: 'bold' },
-        alternateRowStyles: { fillColor: [245, 245, 245] }
-    });
+    doc.autoTable({ startY: 62, head: [['Especificación', 'Valor']], body: rows, theme: 'grid', headStyles: { fillColor: [201, 168, 76], textColor: [0, 0, 0], fontStyle: 'bold' }, alternateRowStyles: { fillColor: [245, 245, 245] } });
 
     if (vehicle.description) {
         const y = doc.lastAutoTable.finalY + 12;
-        doc.setFontSize(12);
-        doc.setTextColor(201, 168, 76);
+        doc.setFontSize(12); doc.setTextColor(201, 168, 76);
         doc.text('Descripción', 20, y);
-        doc.setFontSize(10);
-        doc.setTextColor(50, 50, 50);
+        doc.setFontSize(10); doc.setTextColor(50, 50, 50);
         doc.text(doc.splitTextToSize(vehicle.description, 170), 20, y + 8);
     }
 
     const ph = doc.internal.pageSize.height;
     doc.setFillColor(10, 10, 10);
     doc.rect(0, ph - 18, 210, 18, 'F');
-    doc.setFontSize(8);
-    doc.setTextColor(201, 168, 76);
+    doc.setFontSize(8); doc.setTextColor(201, 168, 76);
     doc.text(`${CONFIG.dealershipName} • WhatsApp: ${CONFIG.whatsappPhone}`, 105, ph - 7, { align: 'center' });
-
     doc.save(`${vehicle.brand}_${vehicle.model}_${vehicle.year}.pdf`);
 }
 
@@ -1822,14 +1668,11 @@ document.addEventListener('keydown', async (e) => {
     if (e.ctrlKey && e.shiftKey && e.key === 'A') {
         e.preventDefault();
         const authenticated = await promptAdminPassword();
-        if (authenticated) {
-            navigateTo('admin');
-        }
+        if (authenticated) navigateTo('admin');
     }
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    initializeData();
     handleRouteChange();
 });
 
