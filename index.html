@@ -10,6 +10,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -33,7 +34,7 @@
     <!-- Lightbox global -->
     <div id="lightbox" class="lightbox" style="display:none">
         <div class="lightbox-backdrop" onclick="closeLightbox()"></div>
-        <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+        <button class="lightbox-close" onclick="closeLightbox()"></button>
         <button class="lightbox-prev" onclick="lightboxNav(-1)">‹</button>
         <img id="lightbox-img" src="" alt="">
         <button class="lightbox-next" onclick="lightboxNav(1)">›</button>
