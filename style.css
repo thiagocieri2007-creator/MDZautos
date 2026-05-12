@@ -129,44 +129,64 @@ body {
     position: relative;
     width: 100%;
     min-height: 100vh;
-    min-height: 100dvh; /* dynamic viewport para iOS Safari */
+    min-height: 100dvh;
     display: flex;
     align-items: center;
     justify-content: center;
     overflow: hidden;
     background: var(--black-0);
-    /* Aislamos el contexto de stacking para que mix-blend-mode funcione en Safari */
     isolation: isolate;
 }
 
-/* ── FIX iOS: logo background ──────────────────────────────────────────────────
-   Safari/iOS no renderiza mix-blend-mode: lighten correctamente cuando hay
-   backdrop-filter en elementos del mismo contexto de stacking.
-   Solución: usamos opacity en lugar de mix-blend-mode, que es universalmente compatible.
-*/
+/* ── LOGO DE FONDO (desktop) ───────────────────────────────────────────────── */
 .splash-logo-bg {
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    -webkit-transform: translate(-50%, -50%);
     width: 85%;
     max-width: 900px;
     height: auto;
     object-fit: contain;
-    /* Reemplazamos mix-blend-mode: lighten por opacity — compatible con todos los navegadores */
     opacity: 0.35;
-    /* mix-blend-mode eliminado — causa el bug en iOS/Safari */
     z-index: 0;
     pointer-events: none;
     animation: splashLogoIn 1.2s ease both;
-    /* Forzamos aceleración de hardware para que Safari no ignore el elemento */
-    -webkit-transform: translate(-50%, -50%);
     will-change: opacity, transform;
 }
 
 @keyframes splashLogoIn {
-    from { opacity: 0; transform: translate(-50%, -50%) scale(0.97); }
-    to   { opacity: 0.35; transform: translate(-50%, -50%) scale(1); }
+    from { opacity: 0; transform: translate(-50%, -50%) scale(0.97); -webkit-transform: translate(-50%, -50%) scale(0.97); }
+    to   { opacity: 0.35; transform: translate(-50%, -50%) scale(1); -webkit-transform: translate(-50%, -50%) scale(1); }
+}
+
+/* ── LOGO CENTRADO VISIBLE EN MOBILE ──────────────────────────────────────────
+   En pantallas pequeñas reemplazamos el logo de fondo difuso por uno
+   bien visible encima del contenido, con tamaño adecuado para celular.
+   Se muestra SOLO en mobile; en desktop sigue siendo el fondo.
+*/
+.splash-logo-mobile {
+    display: none; /* oculto en desktop */
+}
+
+@media (max-width: 768px) {
+    /* Ocultamos el logo de fondo difuso en mobile — queda muy pequeño */
+    .splash-logo-bg {
+        display: none;
+    }
+
+    /* Mostramos el logo nítido y centrado arriba del texto */
+    .splash-logo-mobile {
+        display: block;
+        width: 130px;
+        height: auto;
+        object-fit: contain;
+        margin: 0 auto 1.4rem;
+        filter: brightness(1.15) drop-shadow(0 0 18px rgba(201,168,76,0.35));
+        opacity: 0;
+        animation: fadeUp 0.9s 0.3s ease both;
+    }
 }
 
 /* Gradiente encima para suavizar bordes */
@@ -352,7 +372,6 @@ body {
     opacity: 0;
     animation: fadeUp 0.8s 1.3s cubic-bezier(0.16,1,0.3,1) both;
     overflow: hidden;
-    /* Evita zoom en iOS al tocar botones */
     touch-action: manipulation;
 }
 
@@ -414,12 +433,6 @@ body {
     to   { opacity: 1; }
 }
 
-/* ── FIX iOS: Foto de fondo del splash ──────────────────────────────────────
-   Safari ignora background-image en elementos con position:absolute si el
-   elemento padre tiene overflow:hidden + ciertas combinaciones de transform.
-   Usamos un <img> tag real (manejado en JS) en lugar de background-image.
-   El contenedor .splash-custom-bg queda como wrapper de posicionamiento.
-*/
 .splash-custom-bg {
     position: absolute;
     top: 5%;
@@ -433,13 +446,11 @@ body {
     opacity: 0;
     transition: opacity 0.6s ease;
     border-radius: 12px;
-    overflow: hidden; /* necesario para que border-radius aplique al <img> hijo */
-    /* Mask para fundir bordes */
+    overflow: hidden;
     -webkit-mask-image: radial-gradient(ellipse 88% 88% at 50% 50%, black 55%, transparent 100%);
     mask-image: radial-gradient(ellipse 88% 88% at 50% 50%, black 55%, transparent 100%);
 }
 
-/* El <img> que se inyecta por JS dentro del contenedor */
 .splash-custom-bg img {
     width: 100%;
     height: 100%;
@@ -608,11 +619,9 @@ body {
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: var(--radius-md);
     color: var(--text-light);
-    font-size: 0.9rem;
+    font-size: max(16px, 0.9rem);
     font-family: 'Inter', sans-serif;
     transition: var(--transition);
-    /* Evita zoom automático en iOS al hacer foco en inputs */
-    font-size: max(16px, 0.9rem);
 }
 
 .search-bar input:focus {
@@ -634,19 +643,12 @@ body {
     z-index: 1;
 }
 
-/* ── FIX FILTROS MOBILE ─────────────────────────────────────────────────────
-   Problema: flex-row sin width explícito causaba que los divs se salieran
-   del contenedor y se superpusieran en pantallas angostas.
-   Fix: cada div dentro de filter-row tiene min-width pequeño y flex-wrap
-   funciona correctamente. Las filas de checkboxes tienen width:100%.
-*/
 .filters {
     background: var(--black-3);
     border: 1px solid rgba(255,255,255,0.06);
     border-radius: var(--radius-md);
     padding: 1.4rem 1.6rem;
     margin-bottom: 2rem;
-    /* Evitamos que el contenedor se desborde */
     overflow: hidden;
 }
 
@@ -663,7 +665,6 @@ body {
     display: flex;
     gap: 0.75rem;
     margin-bottom: 1rem;
-    /* flex-wrap ya estaba, pero agregamos align-items para alinear correctamente */
     flex-wrap: wrap;
     align-items: flex-end;
     width: 100%;
@@ -672,12 +673,11 @@ body {
 .filter-row:last-child { margin-bottom: 0; }
 
 .filter-row > div {
-    flex: 1 1 140px; /* crece, se encoge, base 140px — en mobile se apila limpio */
-    min-width: 0;    /* evita overflow cuando el contenido es largo */
-    max-width: 100%; /* nunca supera el ancho del padre */
+    flex: 1 1 140px;
+    min-width: 0;
+    max-width: 100%;
 }
 
-/* Las filas de checkboxes ocupan todo el ancho */
 .filter-row > .checkbox-group {
     flex: 1 1 100%;
     min-width: 0;
@@ -700,15 +700,13 @@ body {
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: var(--radius-sm);
     color: var(--text-light);
-    font-size: max(16px, 0.85rem); /* evita zoom en iOS */
+    font-size: max(16px, 0.85rem);
     font-family: 'Inter', sans-serif;
     transition: var(--transition);
-    /* Apariencia nativa en iOS puede romper estilos; forzamos consistencia */
     -webkit-appearance: none;
     appearance: none;
 }
 
-/* Flecha personalizada para los select */
 .filter-row select {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
@@ -727,7 +725,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    width: 100%; /* garantiza que ocupe todo el ancho disponible */
+    width: 100%;
 }
 
 .checkbox-group label {
@@ -743,9 +741,7 @@ body {
     color: var(--text-muted);
     transition: var(--transition);
     margin-bottom: 0;
-    /* Evita que el texto se corte */
     white-space: nowrap;
-    /* Área táctil mínima recomendada por Apple: 44px de alto */
     min-height: 36px;
     touch-action: manipulation;
 }
@@ -758,7 +754,6 @@ body {
 
 .checkbox-group input[type="checkbox"] {
     accent-color: var(--gold-1);
-    /* Tamaño consistente entre plataformas */
     width: 14px;
     height: 14px;
     flex-shrink: 0;
@@ -1035,7 +1030,7 @@ body {
     margin-top: 10px;
     overflow-x: auto;
     padding-bottom: 4px;
-    -webkit-overflow-scrolling: touch; /* scroll suave en iOS */
+    -webkit-overflow-scrolling: touch;
 }
 
 .thumbnail {
@@ -1510,7 +1505,7 @@ body {
     border: 1px solid rgba(255,255,255,0.08);
     border-radius: var(--radius-sm);
     color: var(--text-light);
-    font-size: max(16px, 0.88rem); /* evita zoom en iOS */
+    font-size: max(16px, 0.88rem);
     font-family: 'Inter', sans-serif;
     transition: var(--transition);
     width: 100%;
@@ -1747,7 +1742,6 @@ body {
     margin: 0;
 }
 
-/* Period selector */
 .stats-controls { margin-top: 1rem; }
 
 .stats-period-bar {
@@ -1783,7 +1777,6 @@ body {
 .period-btn:hover { border-color: var(--gold-border); color: var(--gold-1); }
 .period-btn.active { background: var(--gold-dim); border-color: var(--gold-border); color: var(--gold-1); font-weight: 600; }
 
-/* Tabs */
 .stats-tabs {
     display: flex;
     border-bottom: 1px solid rgba(255,255,255,0.06);
@@ -1878,7 +1871,6 @@ body {
 .kpi-card.kpi-green .kpi-value { color: var(--green); }
 .kpi-card.kpi-blue .kpi-value  { color: var(--blue); }
 
-/* Chart boxes */
 .charts-row {
     display: grid;
     grid-template-columns: 1.5fr 1fr;
@@ -1919,7 +1911,6 @@ body {
     opacity: 0.6;
 }
 
-/* Stats tables */
 .stats-table-section {
     background: var(--black-3);
     border: 1px solid rgba(255,255,255,0.06);
@@ -1966,7 +1957,6 @@ body {
     color: var(--text-faint);
 }
 
-/* Info box */
 .stats-info-box {
     background: rgba(201,168,76,0.05);
     border: 1px solid rgba(201,168,76,0.18);
@@ -2077,7 +2067,6 @@ body {
     .catalog-wrap, .compare-page, .admin-wrap,
     .vehicle-detail-wrap, .stats-page { padding: 1.2rem 1rem; }
 
-    /* Filtros en mobile: una columna por fila */
     .filters { padding: 1.2rem; }
 
     .filter-row {
@@ -2107,7 +2096,7 @@ body {
     }
 
     .splash-content {
-        padding-top: 45vh;
+        padding-top: 52vh;
         padding-bottom: 5rem;
     }
 
@@ -2121,5 +2110,6 @@ body {
 /* Extra pequeño (iPhone SE, etc.) */
 @media (max-width: 390px) {
     .splash-custom-bg { width: 92%; }
-    .splash-content { padding-top: 42vh; }
+    .splash-content { padding-top: 48vh; }
+    .splash-logo-mobile { width: 110px; }
 }
