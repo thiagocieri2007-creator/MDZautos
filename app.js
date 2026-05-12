@@ -1,7 +1,7 @@
 // ─── SUPABASE CONFIG ──────────────────────────────────────────────────────────
 const SUPABASE_URL = 'https://rjzutiiebzecqlnelrzw.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_F9T0ucdfNyItaawCMcQowQ_Yr11boR0';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 // ─── CONFIGURACIÓN ────────────────────────────────────────────────────────────
 const CONFIG = {
@@ -66,7 +66,7 @@ function showToast(message, type = 'success') {
 
 // ─── DATOS — SUPABASE ─────────────────────────────────────────────────────────
 async function getVehicles() {
-    const { data, error } = await supabase
+    const { data, error } = await supabaseClient
         .from('vehicles')
         .select('*')
         .order('added_at', { ascending: false });
@@ -77,17 +77,17 @@ async function getVehicles() {
 async function saveVehicle(vehicle) {
     const row = localToDB(vehicle);
     if (vehicle.id) {
-        const { error } = await supabase.from('vehicles').update(row).eq('id', vehicle.id);
+        const { error } = await supabaseClient.from('vehicles').update(row).eq('id', vehicle.id);
         if (error) { console.error('Error actualizando:', error); return false; }
     } else {
-        const { error } = await supabase.from('vehicles').insert([row]);
+        const { error } = await supabaseClient.from('vehicles').insert([row]);
         if (error) { console.error('Error insertando:', error); return false; }
     }
     return true;
 }
 
 async function deleteVehicleDB(id) {
-    const { error } = await supabase.from('vehicles').delete().eq('id', id);
+    const { error } = await supabaseClient.from('vehicles').delete().eq('id', id);
     if (error) { console.error('Error eliminando:', error); return false; }
     return true;
 }
@@ -95,7 +95,7 @@ async function deleteVehicleDB(id) {
 async function updateVehicleStatus(id, status, soldAt = null) {
     const update = { status };
     if (soldAt !== undefined) update.sold_at = soldAt;
-    const { error } = await supabase.from('vehicles').update(update).eq('id', id);
+    const { error } = await supabaseClient.from('vehicles').update(update).eq('id', id);
     if (error) { console.error('Error actualizando status:', error); return false; }
     return true;
 }
@@ -156,16 +156,16 @@ function localToDB(v) {
 
 // ─── SETTINGS (foto de fondo) ─────────────────────────────────────────────────
 async function getSetting(key) {
-    const { data } = await supabase.from('settings').select('value').eq('key', key).single();
+    const { data } = await supabaseClient.from('settings').select('value').eq('key', key).single();
     return data ? data.value : null;
 }
 
 async function setSetting(key, value) {
-    await supabase.from('settings').upsert({ key, value });
+    await supabaseClient.from('settings').upsert({ key, value });
 }
 
 async function deleteSetting(key) {
-    await supabase.from('settings').delete().eq('key', key);
+    await supabaseClient.from('settings').delete().eq('key', key);
 }
 
 // ─── AUTH ─────────────────────────────────────────────────────────────────────
